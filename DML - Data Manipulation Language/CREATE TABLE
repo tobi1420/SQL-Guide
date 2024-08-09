@@ -1,0 +1,15 @@
+CREATE TABLE STAFF                                                                              -- CREATE TABLE will create a new database object - a table named STAFF.
+(
+     STAFF_ID            VARCHAR(20)                                                            -- The Syntax is the name of the column including constraints of the datatype.
+    ,STAFF_TYPE          VARCHAR(20)                                                            -- A VARCHAR is a text and the number between the characters explains that this text must not be longer than 20
+    ,SCHOOL_ID           VARCHAR(100)                                                           -- If so only the first 20 characters are stoed in the rows.
+    ,LAST_NAME           VARCHAR(100) NOT NULL
+    ,AGE                 INT                                                                    -- INT is an integer meaning a whole number. 
+    ,STARTING_DATE       DATE                                                                   -- DATE accepts date values no matter how these are structured.
+    ,GENDER              VARCHAR(10) CHECK (GENDER IN ('M', 'F'))                               -- The CHECK condition checks if the entered value is M or F. If not then an error is promted to the user.
+    ,JOIN_DATE           DATE
+    ,ADDRESS_ID          VARCHAR(20)
+    ,CONSTRAINT PK_STAFF PRIMARY KEY(STAFF_ID)                                                  -- A CONSTRAINT can also be applied after the column is initialized. Here the column STAFF ID is constrained to be a 
+    ,CONSTRAINT FK_STAFF_SCHOOL FOREIGN KEY(SCHOOL_ID) REFERENCES SCHOOL(SCHOOL_ID)             -- A Primary Key. A PRIMARY Key is 1) Unique for all rows and 2) must not be null. It is typically used to relate tables together.
+    ,CONSTRAINT FK_ADDRESS_ID FOREIGN KEY(ADDRESS_ID) REFERENCES ADDRESS(ADDRESS_ID)            -- A FOREIGN KEY is a KEY that is used to relate to another table. A Primary Ket for one table is a Foreign key for another.
+);                                                                                              -- FOREIGN KEYS must not be null - but they can be duplicates.
