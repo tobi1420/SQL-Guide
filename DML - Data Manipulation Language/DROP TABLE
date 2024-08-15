@@ -1,0 +1,1 @@
+DROP TABLE STAFF                                                                   -- This function removes and deletes the entire table from the database. Must really be used with caution.
