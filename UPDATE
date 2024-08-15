@@ -1,0 +1,6 @@
+UPDATE STAFF                                                                                -- UPDATE is used to update a given column bsed on conditions from one or more columns.
+SET STAFF_TYPE = "Janitor"
+WHERE SCHOOL_ID = 2
+
+UPADTE STAFF SET STAFF_TYPE = "Janitor", JOIN_DATE = "01-01-2000"
+WHERE SCHOOL_ID = 2
