@@ -1,0 +1,5 @@
+ALTER TABLE STAFF DROP COLUMN JOIN_DATE;                                        -- FOR ALTER TABLE the it is necessary to include the table name that needs to be altered and then the command.
+ALTER TABLE STAFF ALTER COLUMN AGE TYPE VARCHAR(5)                              -- Here the table is first initialized, then the operation for the column is specified and lastly the operation is performed.
+ALTER TABLE STAFF RENAME TO STAFF_NEW                                           -- Here the table is first initialized, then the name of the table is altered to be STAFF_NEW.
+ALTER TABLE STAFF RENAME LAST_NAME TO FULL_NAME;                                -- Here the table is first initialized, then the column LAST_NAME is renamed to FULL_NAME.
+ALTER TABLE STAFF ADD CONSTRAINT UNQ_STF UNIQUE(STAFF_TYPE)                     -- Here a new constraint to an existing column is applied. Remember, constraints are not columns but merely ruling for these.
