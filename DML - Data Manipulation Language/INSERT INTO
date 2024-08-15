@@ -1,0 +1,31 @@
+INSERT INTO STAFF                                                                               -- Once a table is created the INSERT INTO is used to add a row to the table.
+    (                                                                                           -- First, all the values in the table must be stated. The constraints are not necessary.
+     STAFF_ID
+    ,STAFF_TYPE
+    ,SCHOOL_ID
+    ,LAST_NAME
+    ,AGE
+    ,STARTING_DATE
+    ,GENDER
+    ,JOIN_DATE
+    ,ADDRESS_ID
+    )
+
+    VALUES                                                                                      -- Then, all the column values for each row is stated. This will create a row in the table.
+    (
+     "1"
+    ,"Principal"
+    ,"3"
+    ,"Ross"
+    ,38
+    ,"11-02-2019"
+    ,"M"
+    ,"13-02-2019"
+    ,"Boluevard 10"        
+    )
+COMMIT;                                                                                         -- COMMIT is the SQL command that is used for storing changes performed by a transaction. 
+
+INSERT INTO STAFF VALUES (                                                                      -- The Syntax can be simplified to this as long as all the columns are included in the values clauses and with the correct datatypes.      
+    ("2", "Teacher", "3", "Hansen", 29, "05-22-2019", "F", "05-22-2019", "Stellavej"),          -- Pro-Tip: Hold ALT + SHIFT while using either Arrow up or down to insert a new line with all the text from the line above.
+    ("3", "Janitor", "3", "Jensen", 49, "05-12-2019", "M", "05-22-2019", "Ananasvænget"),
+)
