@@ -1,0 +1,1 @@
+TRUNCATE TABLE STAFF                                                                    -- TRUNCATE TABLE removes all the rows in a specified table, but it does not remove the table itself including columns, constraints etc.
