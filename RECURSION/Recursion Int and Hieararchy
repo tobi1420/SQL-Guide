@@ -1,0 +1,37 @@
+-- =============================================
+-- Author:		<Tobias Larsen>
+-- Create date: <04-10-2024>
+-- Description:	<Recursion explained>
+-- =============================================
+
+/* Recursion could be described as an iterator. It takes an anchor member as base value. */
+/* Then an increment of the anchor member is performed in the following union call */
+/* This means that the next value is anchor member + 1  which means two for the first recursion = 2 */
+/* A WHERE contrain is applied to limit the amount of iterations. */
+/* All of the rows for the table is finally UNION when the WHERE clause is no longer met */
+
+WITH CountUp AS (
+	SELECT 1 AS [Base] /* 1) Starts with the value 1 as anchor member */
+	UNION ALL 
+	SELECT [Base] + 1 FROM CountUp WHERE [Base] <= 3 /* 2) Then the CTE is called within itself multiple times with a new value for Base every time. */
+)													 /*    First time value is anchor member[1] + 1 = 2. Next time value is Base[2] + 1 = 3.		 */
+												     /*    For each recursion the WHERE condition is checked. Now when Base is eq. or less than 3    */
+SELECT * FROM CountUp;								 /*	   The recursion stops and all the rows are UNION into on table in the end.		             */
+
+
+-- =============================================
+-- Author:		<Tobias Larsen>
+-- Create date: <04-10-2024>
+-- Description:	<Recursion explained for ancestor data>
+-- =============================================
+
+/* In short Recursion can be defined as a function calling itself until at condition is met. */
+WITH cte_ancestor AS (
+	SELECT Parent P, Child C, 1 AS Lvl FROM DimAncestors WHERE Child = 'Frank' /* 1) Anchor member is set to the child Frank */
+	UNION ALL																   /* 4) Union ALL combines all the rows that are traversed during the recursion */
+	SELECT Parent, Child, Lvl+1 AS Lvl FROM cte_ancestor cte_a				   /* 2) 2nd Recursion is performed here. The next values are stored in the execution plan. */
+	INNER JOIN DimAncestors dim_a											   /*    First parent is [Mary] Second parents are [Dave] and [Eve] */
+	ON cte_a.P=dim_a.Child													   /* 3) The entire DimAncestor table is then joined on the smaller Recursion table	*/ 
+)																			   /*    This ensures that the correct Child is returned based on the Parent from the Recursion. */
+SELECT * FROM cte_ancestor
+OPTION (MAXRECURSION 0)
