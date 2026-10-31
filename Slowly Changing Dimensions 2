@@ -1,0 +1,23 @@
+/****
+
+Slowly Changing Dimensions 2 is the most common way to preserve a historical value in a table. 
+The guide below explains the order of the transactions in the entire merge statement.
+****/
+
+INSERT INTO silver.customers (CustomerId, CustomerName, CustomerAddress, ValidFrom, ValidTo, IsCurrent) -- 1) Start defining which columns you want to insert data into.
+SELECT CustomerId, CustomerName, CustomerAddress, GETDATE(), '9999-12-31', 1 FROM ( -- 7) At last the values from the msg subquery is then inserted into the table as the last step. The rows are already updated and insserted in the merge function - but the rows from output is only added right here.
+MERGE silver.customers target -- 2) start building the merge statement. Target is always the merge table and source is always the using table.
+USING bronze.customers source
+ON target.customerId = source.CustomerId AND target.IsCurrent = 1 -- 3) source and target must atleast be related on the common natural key. target rows is always limited by the current value 
+
+WHEN MATCHED AND (target.CustomerName <> source.CustomerName OR target.CustomerAddress <> source.CustomerAddress) THEN -- 4 This will close the previously active rows. If there is a match on the conditions above and there is a difference between target and source values then we have an updated row therefore we close it.
+UPDATE SET 
+target.ValidTo = GETDATE(),
+target.IsCurrent = 0
+
+WHEN NOT MATCHED BY TARGET THEN -- 5) when there is no match against the target then we know that these are new rows. Therefore we insert the values from the source table since they are not present in the target
+INSERT(CustomerId, CustomerName, CustomerAddress, ValidFrom, ValidTo, IsCurrent)
+VALUES(source.CustomerId, source.CustomerName, source.CustomerAddress, GETDATE(), '9999-12-31', 1) 
+
+OUTPUT $action AS [action], source.CustomerId, source.CustomerName, source.CustomerAddress) msg -- 6) the output clause is a temporary log over the transactions handled by the merge. Here we can see the action and the source and target values. What we retrieve here is the source data from the rows where an update was performed ie. all the rows that must be reactivated
+WHERE msg.action = 'UPDATE'
